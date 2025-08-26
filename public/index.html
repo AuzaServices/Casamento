@@ -1,35 +1,32 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Imagem Vertical</title>
+  <title>Imagem em Tela Cheia</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      background-color: #fdfdfd;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      height: 100vh;
-      overflow-y: auto;
+      height: 100%;
+      overflow: hidden;
     }
 
     .imagem-container {
-      max-width: 100%;
-      padding: 20px;
+      width: 100vw;
+      height: 100vh;
     }
 
-    img {
+    .imagem-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* ou 'contain' se quiser ver tudo */
       display: block;
-      max-width: 100%;
-      height: auto;
     }
   </style>
 </head>
 <body>
-<div class="imagem-container">
-  <img src="https://i.imgur.com/abNN8ag.jpeg" alt="Imagem vertical" style="width: 100%; height: auto;">
-</div>
+  <div class="imagem-container">
+    <img src="https://i.imgur.com/SEU-CODIGO.png" alt="Imagem em tela cheia">
+  </div>
 </body>
 </html>
