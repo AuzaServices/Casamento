@@ -210,7 +210,7 @@
         bloqueados.push(item);
         localStorage.setItem("bloqueados", JSON.stringify(bloqueados));
         alert(`Você escolheu: ${item}`);
-        location.reload();
+        btn.disabled = true; // desativa sem recarregar
       };
       container.appendChild(btn);
     });
@@ -240,7 +240,7 @@
         return;
       }
 
-      fetch("https://casamento-0byc.onrender.com/presentes", {
+      fetch("http://localhost:3000/presentes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
