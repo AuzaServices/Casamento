@@ -184,92 +184,80 @@
   </div>
 
   <script>
-    const listaPresentes = [
-      "Xícaras branca", "Jogo de panelas cerâmica", "Panela de pressão",
-      "Kit de facas", "Kit de cama completo", "Kit de toalha de banho",
-      "Escorredor de louça (Inox ou preta)", "Travessas de vidro",
-      "Jogo de jantar porcelana branca", "Jogo de talher inox",
-      "Jarra de suco de vidro", "Batedeira (branca ou preta)",
-      "Jogo de copo de cristal", "Jogo de taças", "Boleira de vidro",
-      "Taças de sobremesa", "Organizador de alimentos (vidro ou acrílico)"
-    ];
+  const listaPresentes = [
+    "Xícaras branca", "Jogo de panelas cerâmica", "Panela de pressão",
+    "Kit de facas", "Kit de cama completo", "Kit de toalha de banho",
+    "Escorredor de louça (Inox ou preta)", "Travessas de vidro",
+    "Jogo de jantar porcelana branca", "Jogo de talher inox",
+    "Jarra de suco de vidro", "Batedeira (branca ou preta)",
+    "Jogo de copo de cristal", "Jogo de taças", "Boleira de vidro",
+    "Taças de sobremesa", "Organizador de alimentos (vidro ou acrílico)"
+  ];
 
-    const container = document.getElementById("presentes");
-    let presenteSelecionado = "";
+  const container = document.getElementById("presentes");
 
-    // Busca os presentes já escolhidos no banco
-    fetch("https://casamento-0byc.onrender.com/presentes")
-      .then(res => res.json())
-      .then(dados => {
-        const bloqueados = dados.map(p => p.presente_escolhido);
-        renderizarPresentes(bloqueados);
-      })
-      .catch(err => {
-        console.error("Erro ao buscar presentes:", err);
-        renderizarPresentes([]);
-      });
+  // Busca os presentes já escolhidos no banco
+  fetch("https://casamento-0byc.onrender.com/presentes")
+    .then(res => res.json())
+    .then(dados => {
+      const bloqueados = dados.map(p => p.presente_escolhido);
+      renderizarPresentes(bloqueados);
+    })
+    .catch(err => {
+      console.error("Erro ao buscar presentes:", err);
+      renderizarPresentes([]);
+    });
 
-    function renderizarPresentes(bloqueados) {
-      listaPresentes.forEach(item => {
-        const btn = document.createElement("button");
-        btn.className = "botao-presente";
-        btn.textContent = item;
-        btn.disabled = bloqueados.includes(item);
-        btn.onclick = () => {
-          presenteSelecionado = item;
-          alert(`Você escolheu: ${item}`);
-          btn.disabled = true;
-        };
-        container.appendChild(btn);
-      });
-    }
+  function renderizarPresentes(bloqueados) {
+    listaPresentes.forEach(item => {
+      const btn = document.createElement("button");
+      btn.className = "botao-presente";
+      btn.textContent = item;
+      btn.disabled = bloqueados.includes(item);
 
-    function copiarPix() {
-      const pixInput = document.getElementById("pix");
-      const valorPix = pixInput.value.trim();
-      if (valorPix.length > 0) {
-        navigator.clipboard.writeText(valorPix);
-        alert("Link do Pix copiado com sucesso!");
-      } else {
-        alert("O campo do Pix está vazio.");
-      }
-    }
+      btn.onclick = () => {
+        const nome = document.getElementById("nome").value.trim();
+        const dataAtual = new Date().toISOString().split("T")[0];
 
-    function enviarFormulario() {
-      const nome = document.getElementById("nome").value.trim();
-      const dataAtual = new Date().toISOString().split("T")[0];
+        if (!nome) {
+          alert("Por favor, preencha seu nome antes de escolher.");
+          return;
+        }
 
-      if (!nome) {
-        alert("Por favor, preencha seu nome antes de enviar.");
-        return;
-      }
-
-      if (!presenteSelecionado) {
-        alert("Por favor, escolha um presente antes de enviar.");
-        return;
-      }
-
-      fetch("https://casamento-0byc.onrender.com/presentes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          nome: nome,
-          data_presente: dataAtual,
-          presente_escolhido: presenteSelecionado
+        fetch("https://casamento-0byc.onrender.com/presentes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            nome,
+            data_presente: dataAtual,
+            presente_escolhido: item
+          })
         })
-      })
-      .then(response => response.text())
-      .then(data => {
-        alert(`Obrigado, ${nome}! Sua escolha foi registrada com sucesso.`);
-        console.log("Resposta do servidor:", data);
-      })
-           .catch(error => {
-        console.error("Erro ao enviar:", error);
-        alert("Ocorreu um erro ao registrar sua escolha.");
-      });
+        .then(response => response.text())
+        .then(data => {
+          alert(`Obrigado, ${nome}! Você escolheu: ${item}`);
+          btn.disabled = true;
+        })
+        .catch(error => {
+          console.error("Erro ao enviar:", error);
+          alert("Ocorreu um erro ao registrar sua escolha.");
+        });
+      };
+
+      container.appendChild(btn);
+    });
+  }
+
+  function copiarPix() {
+    const pixInput = document.getElementById("pix");
+    const valorPix = pixInput.value.trim();
+    if (valorPix.length > 0) {
+      navigator.clipboard.writeText(valorPix);
+      alert("Link do Pix copiado com sucesso!");
+    } else {
+      alert("O campo do Pix está vazio.");
     }
-  </script>
+  }
+</script>
 </body>
 </html>
