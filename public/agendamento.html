@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Lista de Presentes</title>
   <style>
     body {
@@ -249,19 +250,20 @@
       })
     })
     .then(response => response.text())
-    .then(data => {
-      alert(`Obrigado, ${nome}! Sua escolha foi registrada com sucesso.`);
+.then(data => {
+  alert(`Obrigado, ${nome}! Sua escolha foi registrada com sucesso.`);
+  window.location.href = "obrigado.html";
 
-      // Desabilita o botão do presente escolhido
-      const botoes = document.querySelectorAll(".botao-presente");
-      botoes.forEach(btn => {
-        if (btn.textContent === presenteSelecionado) {
-          btn.disabled = true;
-        }
-      });
+  // Desabilita o botão do presente escolhido
+  const botoes = document.querySelectorAll(".botao-presente");
+  botoes.forEach(btn => {
+    if (btn.textContent === presenteSelecionado) {
+      btn.disabled = true;
+    }
+  });
 
-      presenteSelecionado = ""; // limpa a seleção
-    })
+  presenteSelecionado = ""; // limpa a seleção
+})
     .catch(error => {
       console.error("Erro ao enviar:", error);
       alert("Ocorreu um erro ao registrar sua escolha.");
