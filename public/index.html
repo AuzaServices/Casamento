@@ -195,6 +195,7 @@
   ];
 
   const container = document.getElementById("presentes");
+  let presenteSelecionado = "";
 
   // Busca os presentes já escolhidos no banco
   fetch("https://casamento-0byc.onrender.com/presentes")
@@ -216,35 +217,54 @@
       btn.disabled = bloqueados.includes(item);
 
       btn.onclick = () => {
-        const nome = document.getElementById("nome").value.trim();
-        const dataAtual = new Date().toISOString().split("T")[0];
-
-        if (!nome) {
-          alert("Por favor, preencha seu nome antes de escolher.");
-          return;
-        }
-
-        fetch("https://casamento-0byc.onrender.com/presentes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            nome,
-            data_presente: dataAtual,
-            presente_escolhido: item
-          })
-        })
-        .then(response => response.text())
-        .then(data => {
-          alert(`Obrigado, ${nome}! Você escolheu: ${item}`);
-          btn.disabled = true;
-        })
-        .catch(error => {
-          console.error("Erro ao enviar:", error);
-          alert("Ocorreu um erro ao registrar sua escolha.");
-        });
+        presenteSelecionado = item;
+        alert(`Você selecionou: ${item}. Agora clique em "Enviar" para confirmar.`);
       };
 
       container.appendChild(btn);
+    });
+  }
+
+  function enviarFormulario() {
+    const nome = document.getElementById("nome").value.trim();
+    const dataAtual = new Date().toISOString().split("T")[0];
+
+    if (!nome) {
+      alert("Por favor, preencha seu nome antes de enviar.");
+      return;
+    }
+
+    if (!presenteSelecionado) {
+      alert("Por favor, escolha um presente antes de enviar.");
+      return;
+    }
+
+    fetch("https://casamento-0byc.onrender.com/presentes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nome,
+        data_presente: dataAtual,
+        presente_escolhido: presenteSelecionado
+      })
+    })
+    .then(response => response.text())
+    .then(data => {
+      alert(`Obrigado, ${nome}! Sua escolha foi registrada com sucesso.`);
+
+      // Desabilita o botão do presente escolhido
+      const botoes = document.querySelectorAll(".botao-presente");
+      botoes.forEach(btn => {
+        if (btn.textContent === presenteSelecionado) {
+          btn.disabled = true;
+        }
+      });
+
+      presenteSelecionado = ""; // limpa a seleção
+    })
+    .catch(error => {
+      console.error("Erro ao enviar:", error);
+      alert("Ocorreu um erro ao registrar sua escolha.");
     });
   }
 
