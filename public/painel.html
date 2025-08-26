@@ -60,11 +60,8 @@
 
   <script>
     function formatarData(dataString) {
-      const data = new Date(dataString);
-      const dia = String(data.getDate()).padStart(2, '0');
-      const mes = String(data.getMonth() + 1).padStart(2, '0');
-      const ano = String(data.getFullYear()).slice(-2);
-      return `${dia}/${mes}/${ano}`;
+      const [ano, mes, dia] = dataString.split("T")[0].split("-");
+      return `${dia}/${mes}/${ano.slice(-2)}`;
     }
 
     function carregarDados() {
