@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Presentes</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff5f7;
+      margin: 0;
+      padding: 0;
+    }
+
+    .formulario {
+      max-width: 825px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(200, 150, 170, 0.3);
+      padding: 30px;
+    }
+
+    h1 {
+      color: #b76e79;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      color: #333;
+      font-weight: bold;
+      font-size: 35px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 16px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+
+    .presentes {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .botao-presente {
+      width: 100%;
+      padding: 25px;
+      background-color: #b76e79;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 40px;
+      transition: background-color 0.3s;
+    }
+
+    .botao-presente:hover {
+      background-color: #a65c6a;
+    }
+
+    .botao-presente:disabled {
+      background-color: #e0cfd4;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+
+    .pix-section {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #e0cfd4;
+    }
+
+    .qr-code {
+      width: 100%;
+      height: 250px;
+      background-color: #f8e9ed;
+      border: 2px dashed #d8a1b2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #b76e79;
+      font-size: 20px;
+      border-radius: 10px;
+      margin-top: 15px;
+      text-align: center;
+      padding: 10px;
+    }
+
+    input[type="text"].pix-link {
+      margin-top: 15px;
+      font-size: 18px;
+      padding: 16px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      padding: 16px;
+      background-color: #b76e79;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #a65c6a;
+    }
+
+    @media (max-width: 600px) {
+      .formulario {
+        width: 100vw;
+        padding: 24px;
+        margin: 0;
+        border-radius: 0;
+      }
+
+      .botao-presente {
+        width: 100%;
+        font-size: 24px;
+        padding: 28px;
+      }
+
+      input[type="text"], .pix-link {
+        font-size: 20px;
+        padding: 20px;
+      }
+
+      label {
+        font-size: 20px;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+
+      .qr-code {
+        height: 220px;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="formulario">
+    <h1>Lista de Presentes 💝</h1>
+
+    <label for="nome">Seu nome:</label>
+    <input type="text" id="nome" name="nome" placeholder="Digite seu nome">
+
+    <label>Escolha um presente:</label>
+    <div class="presentes" id="presentes"></div>
+
+    <div class="pix-section">
+      <label for="pix">Contribuição via Pix:</label>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+        <div style="flex: 1; font-size: 40px; color: #b76e79; font-weight: bold;">
+          Jucileide Silva de Oliveira
+        </div>
+        <div style="flex: 1; max-width: 250px; margin-right: 20px;">
+          <img src="https://i.imgur.com/AfWmbQG.png" alt="QR Code Pix"
+            style="width: 100%; border-radius: 10px; border: 2px dashed #d8a1b2;">
+        </div>
+      </div>
+
+      <input type="text" class="pix-link" id="pix" name="pix"
+        value="00020126580014BR.GOV.BCB.PIX01369dea9f45-a174-41f4-a1eb-b614165cca525204000053039865802BR5925Jucileide Silva de Olivei6009SAO PAULO62140510YxfOis8tXz63047DB3"
+        readonly>
+
+      <button onclick="copiarPix()" style="font-size: 40px;">Copiar link do Pix</button>
+      <button onclick="enviarFormulario()" style="font-size: 40px; background-color: #6a0dad;">Enviar</button>
+    </div>
+  </div>
+
+  <script>
+  const listaPresentes = [
+    "Xícaras branca", "Jogo de panelas cerâmica", "Panela de pressão",
+    "Kit de facas", "Kit de cama completo", "Kit de toalha de banho",
+    "Escorredor de louça (Inox ou preta)", "Travessas de vidro",
+    "Jogo de jantar porcelana branca", "Jogo de talher inox",
+    "Jarra de suco de vidro", "Batedeira (branca ou preta)",
+    "Jogo de copo de cristal", "Jogo de taças", "Boleira de vidro",
+    "Taças de sobremesa", "Organizador de alimentos (vidro ou acrílico)"
+  ];
+
+  const container = document.getElementById("presentes");
+  let presenteSelecionado = "";
+
+  // Busca os presentes já escolhidos no banco
+  fetch("https://casamento-0byc.onrender.com/presentes")
+    .then(res => res.json())
+    .then(dados => {
+      const bloqueados = dados.map(p => p.presente_escolhido);
+      renderizarPresentes(bloqueados);
+    })
+    .catch(err => {
+      console.error("Erro ao buscar presentes:", err);
+      renderizarPresentes([]);
+    });
+
+  function renderizarPresentes(bloqueados) {
+    listaPresentes.forEach(item => {
+      const btn = document.createElement("button");
+      btn.className = "botao-presente";
+      btn.textContent = item;
+      btn.disabled = bloqueados.includes(item);
+
+      btn.onclick = () => {
+        presenteSelecionado = item;
+        alert(`Você selecionou: ${item}. Agora clique em "Enviar" para confirmar.`);
+      };
+
+      container.appendChild(btn);
+    });
+  }
+
+  function enviarFormulario() {
+    const nome = document.getElementById("nome").value.trim();
+    const dataAtual = new Date().toISOString().split("T")[0];
+
+    if (!nome) {
+      alert("Por favor, preencha seu nome antes de enviar.");
+      return;
+    }
+
+    if (!presenteSelecionado) {
+      alert("Por favor, escolha um presente antes de enviar.");
+      return;
+    }
+
+    fetch("https://casamento-0byc.onrender.com/presentes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nome,
+        data_presente: dataAtual,
+        presente_escolhido: presenteSelecionado
+      })
+    })
+    .then(response => response.text())
+    .then(data => {
+      alert(`Obrigado, ${nome}! Sua escolha foi registrada com sucesso.`);
+
+      // Desabilita o botão do presente escolhido
+      const botoes = document.querySelectorAll(".botao-presente");
+      botoes.forEach(btn => {
+        if (btn.textContent === presenteSelecionado) {
+          btn.disabled = true;
+        }
+      });
+
+      presenteSelecionado = ""; // limpa a seleção
+    })
+    .catch(error => {
+      console.error("Erro ao enviar:", error);
+      alert("Ocorreu um erro ao registrar sua escolha.");
+    });
+  }
+
+  function copiarPix() {
+    const pixInput = document.getElementById("pix");
+    const valorPix = pixInput.value.trim();
+    if (valorPix.length > 0) {
+      navigator.clipboard.writeText(valorPix);
+      alert("Link do Pix copiado com sucesso!");
+    } else {
+      alert("O campo do Pix está vazio.");
+    }
+  }
+</script>
+</body>
+</html>
