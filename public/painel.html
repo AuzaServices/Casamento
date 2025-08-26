@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Presentes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fdfdfd;
+      margin: 0;
+      padding: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #757e38;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 16px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #b6c558;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #ffe5e5;
+    }
+  </style>
+</head>
+<body>
+  <h1>Painel de Presentes</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Data</th>
+        <th>Presente</th>
+      </tr>
+    </thead>
+    <tbody id="tabela-dados">
+      <!-- Dados serão inseridos aqui -->
+    </tbody>
+  </table>
+
+  <script>
+  function carregarDados() {
+    fetch("https://casamento-0byc.onrender.com/presentes")
+      .then(res => res.json())
+      .then(dados => {
+        const tabela = document.getElementById("tabela-dados");
+        tabela.innerHTML = ""; // Limpa a tabela antes de atualizar
+
+        dados.forEach(item => {
+          const linha = document.createElement("tr");
+          linha.innerHTML = `
+            <td>${item.nome}</td>
+            <td>${item.data_presente}</td>
+            <td>${item.presente_escolhido}</td>
+          `;
+          tabela.appendChild(linha);
+        });
+      })
+      .catch(err => {
+        console.error("Erro ao carregar dados:", err);
+        const tabela = document.getElementById("tabela-dados");
+        tabela.innerHTML = `<tr><td colspan="3">Erro ao carregar dados do servidor.</td></tr>`;
+      });
+  }
+
+  // Carrega os dados inicialmente
+  carregarDados();
+
+  // Atualiza a cada 5 segundos
+  setInterval(carregarDados, 5000);
+</script>
+</body>
+</html>
