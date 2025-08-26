@@ -36,7 +36,7 @@ app.post("/presentes", (req, res) => {
     return res.status(400).send("Dados incompletos");
   }
 
-  const sql = "INSERT INTO presentes (nome, data_presente, presente_escolhido) VALUES (?, ?, ?)";
+  const sql = "SELECT nome, data_presente, presente_escolhido FROM presentes";
   db.query(sql, [nome, data_presente, presente_escolhido], (err, result) => {
     if (err) {
       console.error("Erro ao inserir:", err);
