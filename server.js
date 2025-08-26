@@ -14,9 +14,9 @@ app.use(express.static(path.join(__dirname, "public")));
 // Conexão com o banco de dados
 const db = mysql.createConnection({
   host: "sql10.freesqldatabase.com",
-  user: "sql10792206",         // ⬅️ substitua pelo seu usuário MySQL
-  password: "hKT4bm2WIP",       // ⬅️ substitua pela sua senha MySQL
-  database: "sql10792206"      // ⬅️ certifique-se que esse banco existe
+  user: "sql10792206",
+  password: "hKT4bm2WIP",
+  database: "sql10792206"
 });
 
 // Teste de conexão
@@ -43,6 +43,18 @@ app.post("/presentes", (req, res) => {
       return res.status(500).send("Erro ao salvar no banco");
     }
     res.send("Presente registrado com sucesso!");
+  });
+});
+
+// Rota para listar presentes escolhidos
+app.get("/presentes", (req, res) => {
+  const sql = "SELECT presente_escolhido FROM presentes";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar presentes:", err);
+      return res.status(500).send("Erro ao consultar o banco");
+    }
+    res.json(results);
   });
 });
 
