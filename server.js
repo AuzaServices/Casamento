@@ -48,7 +48,7 @@ app.post("/presentes", (req, res) => {
 
 // Rota para listar presentes escolhidos
 app.get("/presentes", (req, res) => {
-  const sql = "SELECT presente_escolhido FROM presentes";
+  const sql = "SELECT nome, data_presente, presente_escolhido FROM presentes";
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Erro ao buscar presentes:", err);
