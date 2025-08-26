@@ -32,7 +32,7 @@
       margin-top: 20px;
       color: #333;
       font-weight: bold;
-      font-size: 35px;
+      font-size: 28px;
     }
 
     input[type="text"] {
@@ -59,11 +59,11 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 40px;
+      font-size: 24px;
       transition: background-color 0.3s;
     }
 
-    .botao-presente:hover {
+    .botao-presente:hover:not(:disabled) {
       background-color: #a65c6a;
     }
 
@@ -79,26 +79,11 @@
       border-top: 1px solid #e0cfd4;
     }
 
-    .qr-code {
-      width: 100%;
-      height: 250px;
-      background-color: #f8e9ed;
-      border: 2px dashed #d8a1b2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #b76e79;
-      font-size: 20px;
-      border-radius: 10px;
-      margin-top: 15px;
-      text-align: center;
-      padding: 10px;
-    }
-
-    input[type="text"].pix-link {
+    .pix-link {
       margin-top: 15px;
       font-size: 18px;
       padding: 16px;
+      width: 100%;
     }
 
     button {
@@ -127,12 +112,6 @@
       }
 
       .botao-presente {
-        width: 100%;
-        font-size: 24px;
-        padding: 28px;
-      }
-
-      input[type="text"], .pix-link {
         font-size: 20px;
         padding: 20px;
       }
@@ -142,12 +121,7 @@
       }
 
       h1 {
-        font-size: 30px;
-      }
-
-      .qr-code {
-        height: 220px;
-        font-size: 18px;
+        font-size: 28px;
       }
     }
   </style>
@@ -165,103 +139,131 @@
     <div class="pix-section">
       <label for="pix">Contribuição via Pix:</label>
 
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
-        <div style="flex: 1; font-size: 40px; color: #b76e79; font-weight: bold;">
-          Jucileide Silva de Oliveira
-        </div>
-
-        <div style="flex: 1; max-width: 250px; margin-right: 20px;">
-          <img src="https://i.imgur.com/AfWmbQG.png" alt="QR Code Pix"
-            style="width: 100%; border-radius: 10px; border: 2px dashed #d8a1b2;">
-        </div>
+      <div style="margin-top: 15px;">
+        <strong style="font-size: 22px; color: #b76e79;">Jucileide Silva de Oliveira</strong>
+        <img src="https://i.imgur.com/AfWmbQG.png" alt="QR Code Pix" style="width: 100%; max-width: 250px; margin-top: 10px; border-radius: 10px; border: 2px dashed #d8a1b2;">
       </div>
 
-      <input type="text" class="pix-link" id="pix" name="pix"
-        value="00020126580014BR.GOV.BCB.PIX01369dea9f45-a174-41f4-a1eb-b614165cca525204000053039865802BR5925Jucileide Silva de Olivei6009SAO PAULO62140510YxfOis8tXz63047DB3"
-        readonly>
+      <input type="text" class="pix-link" id="pix" readonly value="00020126580014BR.GOV.BCB.PIX01369dea9f45-a174-41f4-a1eb-b614165cca525204000053039865802BR5925Jucileide Silva de Olivei6009SAO PAULO62140510YxfOis8tXz63047DB3">
 
-      <button onclick="copiarPix()" style="font-size: 40px;">Copiar link do Pix</button>
-      <button onclick="enviarFormulario()" style="font-size: 40px; background-color: #6a0dad;">Enviar</button>
+      <button onclick="copiarPix()">Copiar link do Pix</button>
+      <button onclick="enviarFormulario()" style="background-color: #6a0dad;">Enviar</button>
     </div>
   </div>
 
   <script>
-    const listaPresentes = [
-      "Xícaras branca", "Jogo de panelas cerâmica", "Panela de pressão",
-      "Kit de facas", "Kit de cama completo", "Kit de toalha de banho",
-      "Escorredor de louça (Inox ou preta)", "Travessas de vidro",
-      "Jogo de jantar porcelana branca", "Jogo de talher inox",
-      "Jarra de suco de vidro", "Batedeira (branca ou preta)",
-      "Jogo de copo de cristal", "Jogo de taças", "Boleira de vidro",
-      "Taças de sobremesa", "Organizador de alimentos (vidro ou acrílico)"
-    ];
+const listaPadrao = [
+  "Xícaras branca", "Jogo de panelas cerâmica", "Panela de pressão",
+  "Kit de facas", "Kit de cama completo", "Kit de toalha de banho",
+  "Escorredor de louça (Inox ou preta)", "Travessas de vidro",
+  "Jogo de jantar porcelana branca", "Jogo de talher inox",
+  "Jarra de suco de vidro", "Batedeira (branca ou preta)",
+  "Jogo de copo de cristal", "Jogo de taças", "Boleira de vidro",
+  "Taças de sobremesa", "Organizador de alimentos (vidro ou acrílico)"
+];
 
-    const container = document.getElementById("presentes");
-    const bloqueados = JSON.parse(localStorage.getItem("bloqueados")) || [];
-    let presenteSelecionado = "";
-
-    listaPresentes.forEach(item => {
-      const btn = document.createElement("button");
-      btn.className = "botao-presente";
-      btn.textContent = item;
-      btn.disabled = bloqueados.includes(item);
-      btn.onclick = () => {
-        presenteSelecionado = item;
-        bloqueados.push(item);
-        localStorage.setItem("bloqueados", JSON.stringify(bloqueados));
-        alert(`Você escolheu: ${item}`);
-        btn.disabled = true;
-      };
-      container.appendChild(btn);
+function carregarPresentes() {
+  fetch("https://casamento-0byc.onrender.com/presentes")
+    .then(response => response.json())
+    .then(lista => {
+      renderizarPresentes(lista);
+    })
+    .catch(() => {
+      // Se falhar, usa a lista local como fallback
+      const listaFallback = listaPadrao.map(nome => ({ nome, indisponivel: false }));
+      renderizarPresentes(listaFallback);
     });
+}
+
+function renderizarPresentes(lista) {
+  const container = document.getElementById("presentes");
+  container.innerHTML = "";
+
+  lista.forEach(presente => {
+    const btn = document.createElement("button");
+    btn.className = "botao-presente";
+    btn.textContent = presente.nome;
+    btn.disabled = presente.indisponivel;
+
+    btn.onclick = () => {
+      presenteSelecionado = presente.nome;
+      document.querySelectorAll(".botao-presente").forEach(b => b.classList.remove("selecionado"));
+      btn.classList.add("selecionado");
+      alert(`Você escolheu: ${presente.nome}`);
+    };
+
+    container.appendChild(btn);
+  });
+}
+
+    function carregarPresentes() {
+      fetch("https://casamento-0byc.onrender.com/presentes")
+        .then(response => response.json())
+        .then(lista => {
+          const container = document.getElementById("presentes");
+          container.innerHTML = "";
+
+          lista.forEach(presente => {
+            const btn = document.createElement("button");
+            btn.className = "botao-presente";
+            btn.textContent = presente.nome;
+            btn.disabled = presente.indisponivel;
+
+            btn.onclick = () => {
+              presenteSelecionado = presente.nome;
+              document.querySelectorAll(".botao-presente").forEach(b => b.classList.remove("selecionado"));
+              btn.classList.add("selecionado");
+              alert(`Você escolheu: ${presente.nome}`);
+            };
+
+            container.appendChild(btn);
+          });
+        });
+    }
 
     function copiarPix() {
       const pixInput = document.getElementById("pix");
-      const valorPix = pixInput.value.trim();
-      if (valorPix.length > 0) {
-        navigator.clipboard.writeText(valorPix);
-        alert("Link do Pix copiado com sucesso!");
-      } else {
-        alert("O campo do Pix está vazio.");
-      }
+      navigator.clipboard.writeText(pixInput.value.trim());
+      alert("Link do Pix copiado com sucesso!");
     }
 
     function enviarFormulario() {
-  const nome = document.getElementById("nome").value.trim();
-  const dataAtual = new Date().toISOString().split("T")[0];
+      const nome = document.getElementById("nome").value.trim();
+      const dataAtual = new Date().toISOString().split("T")[0];
 
-  if (!nome) {
-    alert("Por favor, preencha seu nome antes de enviar.");
-    return;
-  }
+      if (!nome) {
+        alert("Por favor, preencha seu nome.");
+        return;
+      }
 
-  if (!presenteSelecionado) {
-    alert("Por favor, escolha um presente antes de enviar.");
-    return;
-  }
+      if (!presenteSelecionado) {
+        alert("Escolha um presente.");
+        return;
+      }
 
-  fetch("https://casamento-0byc.onrender.com/presentes", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      nome: nome,
-      data_presente: dataAtual,
-      presente_escolhido: presenteSelecionado
-    })
-  })
-  .then(response => response.text())
-  .then(data => {
-    console.log("Resposta do servidor:", data);
-    // Redireciona para a página de agradecimento
-    window.location.href = "/obrigado.html";
-  })
-  .catch(error => {
-    console.error("Erro ao enviar:", error);
-    alert("Ocorreu um erro ao registrar sua escolha.");
-  });
-}
+      fetch("https://casamento-0byc.onrender.com/presentes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nome: nome,
+          data_presente: dataAtual,
+          presente_escolhido: presenteSelecionado
+        })
+      })
+      .then(response => response.text())
+      .then(data => {
+        console.log("Presente registrado:", data);
+        window.location.href = "/obrigado.html";
+      })
+      .catch(error => {
+        console.error("Erro:", error);
+        alert("Erro ao enviar.");
+      });
+    }
+
+    window.onload = carregarPresentes;
   </script>
 </body>
 </html>
