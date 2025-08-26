@@ -164,12 +164,10 @@
 
     <div class="pix-section">
       <label for="pix">Contribuição via Pix:</label>
-
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
         <div style="flex: 1; font-size: 40px; color: #b76e79; font-weight: bold;">
           Jucileide Silva de Oliveira
         </div>
-
         <div style="flex: 1; max-width: 250px; margin-right: 20px;">
           <img src="https://i.imgur.com/AfWmbQG.png" alt="QR Code Pix"
             style="width: 100%; border-radius: 10px; border: 2px dashed #d8a1b2;">
@@ -197,23 +195,34 @@
     ];
 
     const container = document.getElementById("presentes");
-    const bloqueados = JSON.parse(localStorage.getItem("bloqueados")) || [];
     let presenteSelecionado = "";
 
-    listaPresentes.forEach(item => {
-      const btn = document.createElement("button");
-      btn.className = "botao-presente";
-      btn.textContent = item;
-      btn.disabled = bloqueados.includes(item);
-      btn.onclick = () => {
-        presenteSelecionado = item;
-        bloqueados.push(item);
-        localStorage.setItem("bloqueados", JSON.stringify(bloqueados));
-        alert(`Você escolheu: ${item}`);
-        btn.disabled = true;
-      };
-      container.appendChild(btn);
-    });
+    // Busca os presentes já escolhidos no banco
+    fetch("https://casamento-0byc.onrender.com/presentes")
+      .then(res => res.json())
+      .then(dados => {
+        const bloqueados = dados.map(p => p.presente_escolhido);
+        renderizarPresentes(bloqueados);
+      })
+      .catch(err => {
+        console.error("Erro ao buscar presentes:", err);
+        renderizarPresentes([]);
+      });
+
+    function renderizarPresentes(bloqueados) {
+      listaPresentes.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "botao-presente";
+        btn.textContent = item;
+        btn.disabled = bloqueados.includes(item);
+        btn.onclick = () => {
+          presenteSelecionado = item;
+          alert(`Você escolheu: ${item}`);
+          btn.disabled = true;
+        };
+        container.appendChild(btn);
+      });
+    }
 
     function copiarPix() {
       const pixInput = document.getElementById("pix");
@@ -256,13 +265,11 @@
         alert(`Obrigado, ${nome}! Sua escolha foi registrada com sucesso.`);
         console.log("Resposta do servidor:", data);
       })
-      .catch(error => {
+           .catch(error => {
         console.error("Erro ao enviar:", error);
         alert("Ocorreu um erro ao registrar sua escolha.");
       });
     }
-
-    
   </script>
 </body>
 </html>
