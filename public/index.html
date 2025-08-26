@@ -162,57 +162,43 @@
     <label>Escolha um presente:</label>
     <div class="presentes" id="presentes"></div>
 
-<div class="pix-section">
-  <label for="pix">Contribuição via Pix:</label>
+    <div class="pix-section">
+      <label for="pix">Contribuição via Pix:</label>
 
-  <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
-    <!-- Nome à esquerda com fonte maior -->
-    <div style="flex: 1; font-size: 40px; color: #b76e79; font-weight: bold;">
-      Jucileide Silva de Oliveira
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+        <div style="flex: 1; font-size: 40px; color: #b76e79; font-weight: bold;">
+          Jucileide Silva de Oliveira
+        </div>
+
+        <div style="flex: 1; max-width: 250px; margin-right: 20px;">
+          <img src="https://i.imgur.com/AfWmbQG.png" alt="QR Code Pix"
+            style="width: 100%; border-radius: 10px; border: 2px dashed #d8a1b2;">
+        </div>
+      </div>
+
+      <input type="text" class="pix-link" id="pix" name="pix"
+        value="00020126580014BR.GOV.BCB.PIX01369dea9f45-a174-41f4-a1eb-b614165cca525204000053039865802BR5925Jucileide Silva de Olivei6009SAO PAULO62140510YxfOis8tXz63047DB3"
+        readonly>
+
+      <button onclick="copiarPix()" style="font-size: 40px;">Copiar link do Pix</button>
+      <button onclick="enviarFormulario()" style="font-size: 40px; background-color: #6a0dad;">Enviar</button>
     </div>
-
-    <!-- QR Code à direita com margem ajustada -->
-<div style="flex: 1; max-width: 250px; margin-right: 20px;">
-  <img src="https://i.imgur.com/AfWmbQG.png" alt="QR Code Pix"
-    style="width: 100%; border-radius: 10px; border: 2px dashed #d8a1b2;">
-</div>
   </div>
-
-  <!-- Link Pix preenchido -->
-  <input type="text" class="pix-link" id="pix" name="pix"
-    value="00020126580014BR.GOV.BCB.PIX01369dea9f45-a174-41f4-a1eb-b614165cca525204000053039865802BR5925Jucileide Silva de Olivei6009SAO PAULO62140510YxfOis8tXz63047DB3"
-    readonly>
-
-  <!-- Botões sem emojis e com fonte maior -->
-  <button onclick="copiarPix()" style="font-size: 40px;">Copiar link do Pix</button>
-  <button onclick="enviarFormulario()" style="font-size: 40px; background-color: #6a0dad; color: white; border: none; border-radius: 8px; padding: 16px; cursor: pointer;">
-  Enviar
-</button>
-</div>
 
   <script>
     const listaPresentes = [
-      "Xícaras branca",
-      "Jogo de panelas cerâmica",
-      "Panela de pressão",
-      "Kit de facas",
-      "Kit de cama completo",
-      "Kit de toalha de banho",
-      "Escorredor de louça (Inox ou preta)",
-      "Travessas de vidro",
-      "Jogo de jantar porcelana branca",
-      "Jogo de talher inox",
-      "Jarra de suco de vidro",
-      "Batedeira (branca ou preta)",
-      "Jogo de copo de cristal",
-      "Jogo de taças",
-      "Boleira de vidro",
-      "Taças de sobremesa",
-      "Organizador de alimentos (vidro ou acrílico)"
+      "Xícaras branca", "Jogo de panelas cerâmica", "Panela de pressão",
+      "Kit de facas", "Kit de cama completo", "Kit de toalha de banho",
+      "Escorredor de louça (Inox ou preta)", "Travessas de vidro",
+      "Jogo de jantar porcelana branca", "Jogo de talher inox",
+      "Jarra de suco de vidro", "Batedeira (branca ou preta)",
+      "Jogo de copo de cristal", "Jogo de taças", "Boleira de vidro",
+      "Taças de sobremesa", "Organizador de alimentos (vidro ou acrílico)"
     ];
 
     const container = document.getElementById("presentes");
     const bloqueados = JSON.parse(localStorage.getItem("bloqueados")) || [];
+    let presenteSelecionado = "";
 
     listaPresentes.forEach(item => {
       const btn = document.createElement("button");
@@ -220,6 +206,7 @@
       btn.textContent = item;
       btn.disabled = bloqueados.includes(item);
       btn.onclick = () => {
+        presenteSelecionado = item;
         bloqueados.push(item);
         localStorage.setItem("bloqueados", JSON.stringify(bloqueados));
         alert(`Você escolheu: ${item}`);
@@ -228,25 +215,51 @@
       container.appendChild(btn);
     });
 
-  function copiarPix() {
-    const pixInput = document.getElementById("pix");
-    const valorPix = pixInput.value.trim(); // remove espaços extras
-    if (valorPix.length > 0) {
-      navigator.clipboard.writeText(valorPix);
-      alert("Link do Pix copiado com sucesso!");
-    } else {
-      alert("O campo do Pix está vazio.");
+    function copiarPix() {
+      const pixInput = document.getElementById("pix");
+      const valorPix = pixInput.value.trim();
+      if (valorPix.length > 0) {
+        navigator.clipboard.writeText(valorPix);
+        alert("Link do Pix copiado com sucesso!");
+      } else {
+        alert("O campo do Pix está vazio.");
+      }
     }
-  }
-
 
     function enviarFormulario() {
       const nome = document.getElementById("nome").value.trim();
+      const dataAtual = new Date().toISOString().split("T")[0];
+
       if (!nome) {
         alert("Por favor, preencha seu nome antes de enviar.");
         return;
       }
-      alert(`Obrigado, ${nome}! Sua escolha foi registrada com sucesso.`);
+
+      if (!presenteSelecionado) {
+        alert("Por favor, escolha um presente antes de enviar.");
+        return;
+      }
+
+      fetch("https://casamento-0byc.onrender.com/presentes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nome: nome,
+          data_presente: dataAtual,
+          presente_escolhido: presenteSelecionado
+        })
+      })
+      .then(response => response.text())
+      .then(data => {
+        alert(`Obrigado, ${nome}! Sua escolha foi registrada com sucesso.`);
+        console.log("Resposta do servidor:", data);
+      })
+      .catch(error => {
+        console.error("Erro ao enviar:", error);
+        alert("Ocorreu um erro ao registrar sua escolha.");
+      });
     }
   </script>
 </body>
