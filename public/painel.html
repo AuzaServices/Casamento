@@ -59,30 +59,40 @@
   </table>
 
   <script>
-fetch("https://casamento-0byc.onrender.com/presentes")
-  .then(res => res.json())
-  .then(dados => {
-    console.log("Dados recebidos:", dados); // 👈 Adicione isso
+    function formatarData(dataString) {
+      const data = new Date(dataString);
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = String(data.getFullYear()).slice(-2);
+      return `${dia}/${mes}/${ano}`;
+    }
 
-    const tabela = document.getElementById("tabela-dados");
-    tabela.innerHTML = "";
+    function carregarDados() {
+      fetch("https://casamento-0byc.onrender.com/presentes")
+        .then(res => res.json())
+        .then(dados => {
+          const tabela = document.getElementById("tabela-dados");
+          tabela.innerHTML = "";
 
-    dados.forEach(item => {
-      const linha = document.createElement("tr");
-      linha.innerHTML = `
-        <td>${item.nome}</td>
-        <td>${item.data_presente}</td>
-        <td>${item.presente_escolhido}</td>
-      `;
-      tabela.appendChild(linha);
-    });
-  })
+          dados.forEach(item => {
+            const linha = document.createElement("tr");
+            linha.innerHTML = `
+              <td>${item.nome}</td>
+              <td>${formatarData(item.data_presente)}</td>
+              <td>${item.presente_escolhido}</td>
+            `;
+            tabela.appendChild(linha);
+          });
+        })
+        .catch(err => {
+          console.error("Erro ao carregar dados:", err);
+          const tabela = document.getElementById("tabela-dados");
+          tabela.innerHTML = `<tr><td colspan="3">Erro ao carregar dados do servidor.</td></tr>`;
+        });
+    }
 
-  // Carrega os dados inicialmente
-  carregarDados();
-
-  // Atualiza a cada 5 segundos
-  setInterval(carregarDados, 5000);
-</script>
+    carregarDados();
+    setInterval(carregarDados, 5000);
+  </script>
 </body>
 </html>
