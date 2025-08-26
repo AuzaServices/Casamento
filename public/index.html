@@ -210,7 +210,7 @@
         bloqueados.push(item);
         localStorage.setItem("bloqueados", JSON.stringify(bloqueados));
         alert(`Você escolheu: ${item}`);
-        btn.disabled = true; // desativa sem recarregar
+        btn.disabled = true;
       };
       container.appendChild(btn);
     });
