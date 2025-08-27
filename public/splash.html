@@ -10,9 +10,10 @@
       box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
       height: 100%;
       overflow: hidden;
+      background-color: #fff;
     }
 
     .splash {
@@ -21,12 +22,12 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
       transition: opacity 1s ease;
+      z-index: 9999;
+      background-color: #fff;
     }
 
     .splash img {
@@ -35,42 +36,28 @@
       cursor: pointer;
     }
 
-    .splash.fade-out {
+    .fade-out {
       opacity: 0;
       pointer-events: none;
-    }
-
-    .conteudo {
-      display: none;
-    }
-
-    .conteudo.visivel {
-      display: block;
     }
   </style>
 </head>
 <body>
 
-  <!-- Splash com envelope -->
   <div class="splash" id="splash">
-    <img src="https://i.imgur.com/Wo93JL5.jpeg" alt="Envelope">
-  </div>
-
-  <!-- Conteúdo da index.html -->
-  <div class="conteudo" id="conteudo">
-    <iframe src="index.html" style="width:100vw; height:100vh; border:none;"></iframe>
+    <img src="https://i.imgur.com/seuArquivo.png" alt="Envelope">
   </div>
 
   <script>
     const splash = document.getElementById("splash");
-    const conteudo = document.getElementById("conteudo");
 
     splash.addEventListener("click", () => {
       splash.classList.add("fade-out");
+
+      // Aguarda a transição antes de redirecionar
       setTimeout(() => {
-        splash.style.display = "none";
-        conteudo.classList.add("visivel");
-      }, 1000);
+        window.location.href = "index.html";
+      }, 1000); // tempo da transição em milissegundos
     });
   </script>
 
