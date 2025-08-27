@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Splash Envelope</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 1s ease;
+    }
+
+    .splash img {
+      max-width: 100%;
+      max-height: 100%;
+      cursor: pointer;
+    }
+
+    .splash.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .conteudo {
+      display: none;
+    }
+
+    .conteudo.visivel {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Splash com envelope -->
+  <div class="splash" id="splash">
+    <img src="https://i.imgur.com/Wo93JL5.jpeg" alt="Envelope">
+  </div>
+
+  <!-- Conteúdo da index.html -->
+  <div class="conteudo" id="conteudo">
+    <iframe src="index.html" style="width:100vw; height:100vh; border:none;"></iframe>
+  </div>
+
+  <script>
+    const splash = document.getElementById("splash");
+    const conteudo = document.getElementById("conteudo");
+
+    splash.addEventListener("click", () => {
+      splash.classList.add("fade-out");
+      setTimeout(() => {
+        splash.style.display = "none";
+        conteudo.classList.add("visivel");
+      }, 1000);
+    });
+  </script>
+
+</body>
+</html>
