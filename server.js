@@ -52,7 +52,7 @@ app.get("/presentes", (req, res) => {
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Erro ao buscar presentes:", err);
-      return res.status(500).send("Erro ao consultar o banco");
+      return res.status(500).json({ erro: "Erro ao consultar o banco" });
     }
     res.json(results);
   });

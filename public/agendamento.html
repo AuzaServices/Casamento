@@ -199,7 +199,13 @@
 
   // Busca os presentes já escolhidos no banco
   fetch("https://casamento-0byc.onrender.com/presentes")
-    .then(res => res.json())
+    .then(async res => {
+  if (!res.ok) {
+    const texto = await res.text();
+    throw new Error(texto);
+  }
+  return res.json();
+})
     .then(dados => {
       const bloqueados = dados.map(p => p.presente_escolhido);
       renderizarPresentes(bloqueados);
