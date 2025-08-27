@@ -52,7 +52,7 @@
   width: 100px;
   height: 100px;
   top: 950px;
-  left: 437px;
+  left: 440px;
   z-index: 999;
   cursor: pointer;
   border: none;
@@ -63,18 +63,11 @@
 <body>
   <div class="imagem-container">
     <img src="https://i.imgur.com/abNN8ag.jpeg" alt="Imagem com botões">
-
-    <!-- Botão invisível para agendamento -->
     <a href="agendamento.html" class="botao-fantasma"></a>
-
-    <!-- Botão invisível para localização -->
     <a href="https://maps.app.goo.gl/WH5Mmdni9L7raMbw8" class="botao-localizacao"></a>
-
-    <!-- Botão invisível para tocar música -->
-    <button id="botao-musica" class="botao-musica" style="position: absolute; top: 50px; left: 50px; width: 100px; height: 100px; background-color: rgba(255, 0, 0, 0.5); border: none; z-index: 999; cursor: pointer;"></button>
+    <button id="botao-musica" class="botao-musica"></button>
   </div>
 
-  <!-- Áudio com link direto via jsDelivr -->
   <audio id="audio-musica" src="https://cdn.jsdelivr.net/gh/AuzaServices/musica-site/SaveGram.mp3"></audio>
 
   <script>
