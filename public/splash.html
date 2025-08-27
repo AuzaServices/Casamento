@@ -29,35 +29,43 @@
       display: block;
     }
 
-    .botao-fantasma {
+    .botao-fantasma,
+    .botao-localizacao,
+    .botao-whatsapp {
       position: absolute;
       width: 100px;
       height: 100px;
+      cursor: pointer;
+    }
+
+    .botao-fantasma {
       top: 4327px;
       right: 155px;
-      cursor: pointer;
     }
 
     .botao-localizacao {
+      top: 4327px;
+      right: 730px;
+    }
+
+    .botao-whatsapp {
+      top: 4327px;
+      right: 437px;
+      background: transparent;
+      border: none;
+    }
+
+    .botao-musica {
       position: absolute;
       width: 100px;
       height: 100px;
-      top: 4327px;
-      right: 730px;
+      top: 950px;
+      left: 440px;
+      z-index: 999;
       cursor: pointer;
+      border: none;
+      background: transparent;
     }
-
-.botao-musica {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  top: 950px;
-  left: 440px;
-  z-index: 999;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-}
   </style>
 </head>
 <body>
@@ -65,6 +73,7 @@
     <img src="https://i.imgur.com/abNN8ag.jpeg" alt="Imagem com botões">
     <a href="agendamento.html" class="botao-fantasma"></a>
     <a href="https://maps.app.goo.gl/WH5Mmdni9L7raMbw8" class="botao-localizacao"></a>
+    <a href="https://wa.me/5585994327576?text=Oii%20Jhucy%2C%20t%C3%B4%20passando%20pra%20confirmar%20a%20minha%20presen%C3%A7a%20nesse%20dia%20muito%20especial%2C%20Seu%20casamento." class="botao-whatsapp" target="_blank"></a>
     <button id="botao-musica" class="botao-musica"></button>
   </div>
 
