@@ -16,25 +16,19 @@
       background-color: #fff;
     }
 
-    .splash {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 1s ease;
-      z-index: 9999;
-      background-color: #fff;
-    }
+.splash {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 
 .splash img {
   width: 100%;
-  height: auto; /* ou height: 100vh */
+  height: 100%;
   object-fit: cover;
-  object-position: top;
+  object-position: center top; /* ← foca no topo da imagem */
+  display: block;
 }
 
     .fade-out {
