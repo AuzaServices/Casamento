@@ -33,7 +33,7 @@
       position: absolute;
       width: 100px;
       height: 100px;
-      top: 4327px;           /* posição do botão Agendar */
+      top: 4327px;
       right: 155px;
       cursor: pointer;
     }
@@ -42,18 +42,41 @@
       position: absolute;
       width: 100px;
       height: 100px;
-      top: 4327px;           /* posição diferente do botão Localização */
+      top: 4327px;
       right: 730px;
       cursor: pointer;
     }
 
+.botao-musica {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 950px;
+  left: 437px;
+  z-index: 999;
+  cursor: pointer;
+  border: none;
+  background-color: rgba(255, 0, 0, 0.5); /* vermelho semi-transparente */
+}
   </style>
 </head>
 <body>
   <div class="imagem-container">
-    <img src="https://i.imgur.com/abNN8ag.jpeg" alt="Imagem com botões">
+    <img src="/public/pg.png" alt="Imagem com botões">
     <a href="agendamento.html" class="botao-fantasma"></a>
     <a href="https://maps.app.goo.gl/WH5Mmdni9L7raMbw8" class="botao-localizacao"></a>
+    <button id="botao-musica" class="botao-musica"></button>
   </div>
+
+  <audio id="audio-musica" src="https://suamusica.com.br/davinascimentoLj/casamento"></audio>
+
+  <script>
+    const botaoMusica = document.getElementById("botao-musica");
+    const audio = document.getElementById("audio-musica");
+
+    botaoMusica.addEventListener("click", () => {
+      audio.play();
+    });
+  </script>
 </body>
 </html>
