@@ -1,5 +1,5 @@
 const express = require("express");
-const mysql = require('mysql2');
+const mysql = require("mysql2");
 const path = require("path");
 const cors = require("cors");
 
@@ -12,7 +12,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Conexão com o banco de dados
-
 const db = mysql.createPool({
   host: "sql10.freesqldatabase.com",
   user: "sql10792206",
@@ -23,12 +22,12 @@ const db = mysql.createPool({
   queueLimit: 0
 });
 
-// Teste de conexão
-db.connect((err) => {
+// Teste de conexão com uma query simples
+db.query("SELECT 1", (err) => {
   if (err) {
-    console.error("Erro ao conectar no banco:", err);
+    console.error("Erro ao conectar no banco:", err.message);
   } else {
-    console.log("Conectado ao MySQL com sucesso!");
+    console.log("Conexão com o banco funcionando!");
   }
 });
 
