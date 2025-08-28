@@ -1,5 +1,5 @@
 const express = require("express");
-const mysql = require("mysql2");
+const mysql = require('mysql2');
 const path = require("path");
 const cors = require("cors");
 
@@ -12,11 +12,15 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Conexão com o banco de dados
-const db = mysql.createConnection({
+
+const db = mysql.createPool({
   host: "sql10.freesqldatabase.com",
   user: "sql10792206",
   password: "hKT4bm2WIP",
-  database: "sql10792206"
+  database: "sql10792206",
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 // Teste de conexão
