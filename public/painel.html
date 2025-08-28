@@ -72,27 +72,33 @@
     }
 
     function carregarDados() {
-      fetch("https://casamento-0byc.onrender.com/presentes")
-        .then(res => res.json())
-        .then(dados => {
-          const tabela = document.getElementById("tabela-dados");
-          tabela.innerHTML = "";
+fetch("https://casamento-0byc.onrender.com/presentes")
+  .then(res => res.json())
+  .then(dados => {
+    if (!Array.isArray(dados)) {
+      console.error("Resposta inesperada:", dados);
+      throw new Error("Dados recebidos não são uma lista.");
+    }
 
-          dados.forEach(item => {
-            const linha = document.createElement("tr");
-            linha.innerHTML = `
-              <td>${item.nome}</td>
-              <td>${formatarData(item.data_presente)}</td>
-              <td>${item.presente_escolhido}</td>
-            `;
-            tabela.appendChild(linha);
-          });
-        })
-        .catch(err => {
-          console.error("Erro ao carregar dados:", err);
-          const tabela = document.getElementById("tabela-dados");
-          tabela.innerHTML = `<tr><td colspan="3">Erro ao carregar dados do servidor.</td></tr>`;
-        });
+    const tabela = document.getElementById("tabela-dados");
+    tabela.innerHTML = "";
+
+    dados.forEach(item => {
+      const linha = document.createElement("tr");
+      linha.innerHTML = `
+        <td>${item.nome}</td>
+        <td>${formatarData(item.data_presente)}</td>
+        <td>${item.presente_escolhido}</td>
+      `;
+      tabela.appendChild(linha);
+    });
+  })
+  .catch(err => {
+    console.error("Erro ao carregar dados:", err);
+    const tabela = document.getElementById("tabela-dados");
+    tabela.innerHTML = `<tr><td colspan="3">Erro ao carregar dados do servidor.</td></tr>`;
+  });
+
     }
 
     carregarDados();

@@ -51,8 +51,8 @@ app.get("/presentes", (req, res) => {
   const sql = "SELECT nome, data_presente, presente_escolhido FROM presentes";
   db.query(sql, (err, results) => {
     if (err) {
-      console.error("Erro ao buscar presentes:", err);
-      return res.status(500).json({ erro: "Erro ao consultar o banco" });
+      console.error("Erro ao buscar presentes:", err.message);
+      return res.status(500).json({ erro: "Erro ao consultar o banco", detalhes: err.message });
     }
     res.json(results);
   });
